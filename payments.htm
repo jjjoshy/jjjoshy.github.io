@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay4 App</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        #items {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 8px 12px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #qrcode {
+            margin-top: 20px;
+        }
+        @media (max-width: 480px) {
+            .item {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Pay4 App</h2>
+        <div id="items">
+            <div class="item">
+                <input type="text" placeholder="Item Name">
+                <input type="number" class="amount" placeholder="Amount">
+                <button onclick="addItem()">+</button>
+            </div>
+        </div>
+        <h3>Total: AUD <span id="total">0</span></h3>
+        <button onclick="generateQRCode()">Generate QR Code</button>
+        <div id="qrcode"></div>
+    </div>
+
+    <script>
+        function addItem() {
+            let itemDiv = document.createElement("div");
+            itemDiv.classList.add("item");
+            itemDiv.innerHTML = `
+                <input type="text" placeholder="Item Name">
+                <input type="number" class="amount" placeholder="Amount">
+                <button onclick="removeItem(this)">-</button>
+            `;
+            document.getElementById("items").appendChild(itemDiv);
+        }
+
+        function removeItem(button) {
+            button.parentElement.remove();
+            updateTotal();
+        }
+
+        function updateTotal() {
+            let amounts = document.querySelectorAll(".amount");
+            let total = 0;
+            amounts.forEach(input => {
+                total += parseFloat(input.value) || 0;
+            });
+            document.getElementById("total").innerText = total.toFixed(2);
+        }
+
+        document.getElementById("items").addEventListener("input", updateTotal);
+
+        function generateQRCode() {
+            let totalAmount = document.getElementById("total").innerText;
+            if (parseFloat(totalAmount) === 0) {
+                alert("Please enter amounts");
+                return;
+            }
+            let message = `Amount AUD ${totalAmount} to be transferred to Bank`;
+            let qrDiv = document.getElementById("qrcode");
+            qrDiv.innerHTML = ""; // Clear previous QR code
+            new QRCode(qrDiv, {
+                text: message,
+                width: 200,
+                height: 200
+            });
+        }
+    </script>
+</body>
+</html>
