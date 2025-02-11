@@ -5,22 +5,71 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Category & Subcategory Select</title>
   <style>
+    /* Global styles for Pay4 App */
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f7fa;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
     .select-container {
       display: flex;
       flex-direction: column;
-      width: 300px;
-      margin: 50px auto;
+      width: 350px;
+      padding: 20px;
+      border-radius: 8px;
+      background-color: #fff;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     select {
-      padding: 8px;
-      margin-bottom: 10px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
       font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background-color: #f9f9f9;
+      color: #333;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    select:focus {
+      border-color: #add8e6; /* Light blue color */
+      background-color: #ffffff;
     }
 
     label {
       font-weight: bold;
-      margin-bottom: 5px;
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #555;
+    }
+
+    option {
+      padding: 8px;
+    }
+
+    /* Button Style (optional) */
+    button {
+      background-color: #add8e6; /* Light blue color */
+      color: #fff;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #87cefa; /* Lighter blue on hover */
     }
   </style>
 </head>
@@ -39,7 +88,6 @@
   </div>
 
   <script>
-    // This is the JSON structure containing the categories and subcategories
     const productCategories = {
       "products": {
         "Fashion & Apparel": [
@@ -147,11 +195,9 @@
       "Home Security (Cameras, Alarms)",
       "Garden & Landscaping Equipment"
     ]
-        // You can continue adding more categories here...
       }
     };
 
-    // Function to populate the Category dropdown
     function populateCategories() {
       const categorySelect = document.getElementById('category');
       const categories = Object.keys(productCategories.products);
@@ -164,13 +210,11 @@
       });
     }
 
-    // Function to populate the Subcategory dropdown based on selected Category
     function populateSubcategories() {
       const categorySelect = document.getElementById('category');
       const subcategorySelect = document.getElementById('subcategory');
       const selectedCategory = categorySelect.value;
 
-      // Clear previous subcategories
       subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
 
       if (selectedCategory) {
@@ -185,10 +229,7 @@
       }
     }
 
-    // Event listener to trigger population of subcategories when a category is selected
     document.getElementById('category').addEventListener('change', populateSubcategories);
-
-    // Call populateCategories on page load to populate the Category dropdown
     window.onload = populateCategories;
   </script>
 
