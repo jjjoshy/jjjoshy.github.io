@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word Cloud Pronunciation App</title>
+  <style>
+    /* General Styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .word-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      max-width: 800px;
+    }
+    .word {
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .word:hover {
+      transform: scale(1.1);
+    }
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .modal-content h2 {
+      margin-bottom: 10px;
+    }
+    .modal-content p {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+    .close-button {
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .close-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Word Cloud Pronunciation</h1>
+  <div class="word-cloud" id="word-cloud">
+    <!-- Words will be dynamically added here -->
+  </div>
+
+  <!-- Modal for showing pronunciation -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h1 id="modal-word"></h1>
+      <p><strong>IPA:</strong> <span id="modal-ipa"></span></p>
+      <p><span id="modal-phoneticspelling"></span></p>
+      <button class="close-button" id="close-button">Close</button>
+    </div>
+  </div>
+
+  <script>
+    // JSON data embedded in the script
+    const pronunciationData = [
+      { "word": "Ability", "ipa": "/əˈbɪl.ɪ.ti/", "phoneticspelling": "uh-BIL-ih-tee" },
+      { "word": "Absent", "ipa": "/ˈæb.sənt/", "phoneticspelling": "AB-suhnt" },
+      { "word": "Absolute", "ipa": "/ˈæb.sə.luːt/", "phoneticspelling": "AB-suh-loot" },
+      { "word": "Abundance", "ipa": "/əˈbʌn.dəns/", "phoneticspelling": "uh-BUN-duhns" },
+      { "word": "Accelerate", "ipa": "/əkˈsel.ə.reɪt/", "phoneticspelling": "uhk-SEL-uh-rayt" },
+      { "word": "Accident", "ipa": "/ˈæk.sɪ.dənt/", "phoneticspelling": "AK-sih-duhnt" },
+      { "word": "Accommodate", "ipa": "/əˈkɒm.ə.deɪt/", "phoneticspelling": "uh-KOM-uh-dayt" },
+      { "word": "Accompaniment", "ipa": "/əˈkʌm.pə.nɪ.mənt/", "phoneticspelling": "uh-KUM-puh-nih-muhnt" },
+      { "word": "Accumulate", "ipa": "/əˈkjuː.mjə.leɪt/", "phoneticspelling": "uh-KYOO-myuh-layt" },
+      { "word": "Accurate", "ipa": "/ˈæk.jə.rət/", "phoneticspelling": "AK-yuh-ruht" },
+      { "word": "Achieve", "ipa": "/əˈtʃiːv/", "phoneticspelling": "uh-CHEEV" },
+      { "word": "Acknowledge", "ipa": "/əkˈnɒl.ɪdʒ/", "phoneticspelling": "uhk-NOL-ij" },
+      { "word": "Acquire", "ipa": "/əˈkwaɪər/", "phoneticspelling": "uh-KWY-ur" },
+      { "word": "Adapt", "ipa": "/əˈdæpt/", "phoneticspelling": "uh-DAPT" },
+      { "word": "Adjust", "ipa": "/əˈdʒʌst/", "phoneticspelling": "uh-JUST" },
+      { "word": "Admire", "ipa": "/ədˈmaɪər/", "phoneticspelling": "uhd-MY-ur" },
+      { "word": "Admit", "ipa": "/ədˈmɪt/", "phoneticspelling": "uhd-MIT" },
+      { "word": "Adopt", "ipa": "/əˈdɒpt/", "phoneticspelling": "uh-DOPT" },
+      { "word": "Advance", "ipa": "/ədˈvɑːns/", "phoneticspelling": "uhd-VAHNS" },
+      { "word": "Advise", "ipa": "/ədˈvaɪz/", "phoneticspelling": "uhd-VYZ" },
+      { "word": "Affect", "ipa": "/əˈfekt/", "phoneticspelling": "uh-FEKT" },
+      { "word": "Afford", "ipa": "/əˈfɔːd/", "phoneticspelling": "uh-FORD" },
+      { "word": "Agree", "ipa": "/əˈɡriː/", "phoneticspelling": "uh-GREE" },
+      { "word": "Alert", "ipa": "/əˈlɜːt/", "phoneticspelling": "uh-LURT" },
+      { "word": "Allow", "ipa": "/əˈlaʊ/", "phoneticspelling": "uh-LOW" },
+      { "word": "Amaze", "ipa": "/əˈmeɪz/", "phoneticspelling": "uh-MAYZ" },
+      { "word": "Analyse", "ipa": "/ˈæn.ə.laɪz/", "phoneticspelling": "AN-uh-lyz" },
+      { "word": "Announce", "ipa": "/əˈnaʊns/", "phoneticspelling": "uh-NOWNS" },
+      { "word": "Annoy", "ipa": "/əˈnɔɪ/", "phoneticspelling": "uh-NOY" },
+      { "word": "Answer", "ipa": "/ˈɑːn.sər/", "phoneticspelling": "AHN-sur" },
+      { "word": "Apologise", "ipa": "/əˈpɒl.ə.dʒaɪz/", "phoneticspelling": "uh-POL-uh-jyz" },
+      { "word": "Appear", "ipa": "/əˈpɪər/", "phoneticspelling": "uh-PEER" },
+      { "word": "Apply", "ipa": "/əˈplaɪ/", "phoneticspelling": "uh-PLY" },
+      { "word": "Appreciate", "ipa": "/əˈpriː.ʃi.eɪt/", "phoneticspelling": "uh-PREE-shee-ayt" },
+      { "word": "Approach", "ipa": "/əˈprəʊtʃ/", "phoneticspelling": "uh-PROHCH" },
+      { "word": "Argue", "ipa": "/ˈɑːɡ.juː/", "phoneticspelling": "AHG-yoo" },
+      { "word": "Arrange", "ipa": "/əˈreɪndʒ/", "phoneticspelling": "uh-RAYNJ" },
+      { "word": "Arrive", "ipa": "/əˈraɪv/", "phoneticspelling": "uh-RYV" },
+      { "word": "Ask", "ipa": "/ɑːsk/", "phoneticspelling": "AH-sk" },
+      { "word": "Assist", "ipa": "/əˈsɪst/", "phoneticspelling": "uh-SIST" },
+      { "word": "Assume", "ipa": "/əˈsjuːm/", "phoneticspelling": "uh-SYOOM" },
+      { "word": "Attach", "ipa": "/əˈtætʃ/", "phoneticspelling": "uh-TACH" },
+      { "word": "Attempt", "ipa": "/əˈtempt/", "phoneticspelling": "uh-TEMPT" },
+      { "word": "Attend", "ipa": "/əˈtend/", "phoneticspelling": "uh-TEND" },
+      { "word": "Attract", "ipa": "/əˈtrækt/", "phoneticspelling": "uh-TRAKT" },
+      { "word": "Avoid", "ipa": "/əˈvɔɪd/", "phoneticspelling": "uh-VOYD" },
+      { "word": "Awake", "ipa": "/əˈweɪk/", "phoneticspelling": "uh-WAYK" },
+      { "word": "Aware", "ipa": "/əˈweər/", "phoneticspelling": "uh-WAIR" }
+    ];
+
+    // Get DOM elements
+    const wordCloud = document.getElementById("word-cloud");
+    const modal = document.getElementById("modal");
+    const modalWord = document.getElementById("modal-word");
+    const modalIpa = document.getElementById("modal-ipa");
+    const modalPhoneticspelling = document.getElementById("modal-phoneticspelling");
+    const closeButton = document.getElementById("close-button");
+
+    // Function to generate random font size
+    function getRandomFontSize() {
+      return Math.floor(Math.random() * (40 - 16 + 1)) + 16; // Random size between 16px and 40px
+    }
+
+    // Function to generate random color
+    function getRandomColor() {
+      const letters = "0123456789ABCDEF";
+      let color = "#";
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+	
+	fetch('data.json')
+      .then(response => response.json())
+      .then(data => {
+        const wordCloud = document.getElementById("word-cloud");
+		
+
+    // Populate the word cloud
+    //pronunciationData.forEach(item => {
+      //const wordElement = document.createElement("div");
+      data.forEach(item => {
+      const wordElement = document.createElement("div");
+      wordElement.className = "word";
+      wordElement.textContent = item.word;
+      wordElement.style.fontSize = `${getRandomFontSize()}px`;
+      wordElement.style.color = getRandomColor();
+      wordElement.addEventListener("click", () => showModal(item));
+      wordCloud.appendChild(wordElement);
+    });
+
+    // Show modal with pronunciation details
+    function showModal(data) {
+      modalWord.textContent = data.phoneticspelling;
+      modalIpa.textContent = data.ipa;
+      modalPhoneticspelling.textContent = data.word;
+      modal.style.display = "flex";
+    }
+
+    // Close modal
+    closeButton.addEventListener("click", () => {
+      modal.style.display = "none";
+    });
+
+    // Close modal when clicking outside the modal content
+    window.addEventListener("click", (event) => {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>
