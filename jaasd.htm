@@ -88,7 +88,7 @@
     <div class="modal-content">
       <h2 id="modal-word"></h2>
       <p><strong>IPA:</strong> <span id="modal-ipa"></span></p>
-      <p><strong>Phonetic Spelling:</strong> <span id="modal-phoneticspelling"></span></p>
+      <p><span id="modal-phoneticspelling"></span></p>
       <button class="close-button" id="close-button">Close</button>
     </div>
   </div>
@@ -182,9 +182,9 @@
 
     // Show modal with pronunciation details
     function showModal(data) {
-      modalWord.textContent = data.word;
+      modalWord.textContent = data.phoneticspelling;
       modalIpa.textContent = data.ipa;
-      modalPhoneticspelling.textContent = data.phoneticspelling;
+      modalPhoneticspelling.textContent = data.word;
       modal.style.display = "flex";
     }
 
