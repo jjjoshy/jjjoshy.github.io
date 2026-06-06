@@ -1,0 +1,473 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vowel Sound Finder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1a1008;
+      --paper: #f5efe6;
+      --accent: #c0392b;
+      --gold: #b8860b;
+      --muted: #8b7355;
+      --balloon-bg: #1a1008;
+      --balloon-text: #f5efe6;
+      --card-bg: rgba(255,255,255,0.88);
+      --card-border: rgba(26,16,8,0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: var(--paper);
+      background-image: repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(139,115,85,0.13) 31px, rgba(139,115,85,0.13) 32px);
+      color: var(--ink);
+      font-family: 'Playfair Display', Georgia, serif;
+      padding: 32px 18px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .page-shell {
+      width: min(1080px, 100%);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    header h1 {
+      font-size: clamp(2.4rem, 6vw, 3.6rem);
+      letter-spacing: -0.02em;
+    }
+
+    header p {
+      margin-top: 12px;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.82rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    select, button {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.9rem;
+      border: 1px solid var(--card-border);
+      border-radius: 999px;
+      padding: 14px 18px;
+      background: white;
+      color: var(--ink);
+      cursor: pointer;
+      transition: transform 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    select:focus, button:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    button:hover, select:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(26,16,8,0.08);
+    }
+
+    .words-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .word-card {
+      position: relative;
+      cursor: pointer;
+      padding: 22px 20px 16px;
+      border-radius: 24px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      box-shadow: 0 20px 40px rgba(26,16,8,0.06);
+      overflow: visible;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .word-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 24px 48px rgba(26,16,8,0.1);
+    }
+
+    .word-num {
+      display: inline-block;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .word-text {
+      display: block;
+      font-size: 1.45rem;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-top: 8px;
+      font-weight: 700;
+    }
+
+    .balloon {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: -104px;
+      width: calc(100% - 32px);
+      padding: 14px 14px 12px;
+      border-radius: 22px;
+      background: var(--balloon-bg);
+      color: var(--balloon-text);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+      z-index: 2;
+    }
+
+    .balloon.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(-6px);
+    }
+
+    .balloon-arrow {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 16px;
+      height: 16px;
+      background: var(--balloon-bg);
+      box-shadow: -1px -1px 0 rgba(0,0,0,0.06);
+    }
+
+    .balloon-pos,
+    .balloon-ipa,
+    .balloon-meaning {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .balloon-pos {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+    }
+
+    .balloon-ipa {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.92rem;
+      color: var(--gold);
+      letter-spacing: 0.06em;
+    }
+
+    .balloon-meaning {
+      font-size: 0.84rem;
+      line-height: 1.55;
+      color: #e8dcc8;
+    }
+
+    .balloon-loading {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: #b2a58d;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .spinner {
+      width: 12px;
+      height: 12px;
+      border: 2px solid #9a8a74;
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .note {
+      margin-top: 26px;
+      text-align: center;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.84rem;
+      letter-spacing: 0.14em;
+    }
+
+    @media (max-width: 640px) {
+      .balloon {
+        width: 100%;
+        left: 50%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header>
+      <h1>Vowel Sound Finder</h1>
+      <p>Select a monophthong or diphthong, tap a word, and fetch pronunciation from dictionaryapi.dev.</p>
+    </header>
+
+    <div class="controls">
+      <label>
+        <select id="vowelSelect" aria-label="Choose a vowel sound">
+          <option value="ɑː">/ɑː/</option>
+          <option value="ɒ">/ɒ/</option>
+          <option value="ɔː">/ɔː/</option>
+          <option value="ʊ">/ʊ/</option>
+          <option value="uː">/uː/</option>
+          <option value="iː">/iː/</option>
+          <option value="ɪ">/ɪ/</option>
+          <option value="e">/e/</option>
+          <option value="æ">/æ/</option>
+          <option value="ʌ">/ʌ/</option>
+          <option value="ə">/ə/</option>
+          <option value="eɪ">/eɪ/</option>
+          <option value="aɪ">/aɪ/</option>
+          <option value="ɔɪ">/ɔɪ/</option>
+          <option value="aʊ">/aʊ/</option>
+          <option value="əʊ">/əʊ/</option>
+          <option value="ɪə">/ɪə/</option>
+          <option value="eə">/eə/</option>
+          <option value="ʊə">/ʊə/</option>
+        </select>
+      </label>
+      <button id="nextButton">Next 10 words</button>
+    </div>
+
+    <div class="words-grid" id="wordsGrid"></div>
+    <div class="note">Tap any word to reveal its IPA and hear pronunciation.</div>
+  </div>
+
+  <script>
+    const VOWEL_WORDS = {
+      "ɑː": [
+        "car","father","calm","start","park","arm","heart","half","dark","farm",
+        "march","sharp","large","party","garden","scar","armchair","barn","harbor","artist"
+      ],
+      "ɒ": [
+        "hot","dog","pot","clock","box","job","not","rock","stop","watch",
+        "lot","pop","cop","shop","mop","sock","cloth","block","country","pocket"
+      ],
+      "ɔː": [
+        "law","more","saw","door","floor","thought","call","walk","short","store",
+        "score","all","draw","daughter","course","board","north","warm","lawyer","storm"
+      ],
+      "ʊ": [
+        "book","put","could","foot","good","look","push","full","would","wolf",
+        "pull","took","should","hook","nook","wood","putting","bullet","stood","goodness"
+      ],
+      "uː": [
+        "food","blue","too","moon","school","true","June","move","shoe","room",
+        "goose","fruit","rule","pool","you","cool","root","chew","through","tune"
+      ],
+      "iː": [
+        "see","tree","green","sheep","leave","key","team","seat","heat","need",
+        "sleep","deep","cheap","speak","believe","me","be","receive","peace","reason"
+      ],
+      "ɪ": [
+        "sit","ship","list","finish","window","happy","ticket","picture","middle","drink",
+        "gift","bitter","river","listen","city","system","busy","problem","digit","whisper"
+      ],
+      "e": [
+        "bed","set","head","pen","red","best","step","dress","help","tell",
+        "send","sell","test","friend","message","section","level","center","better","effort"
+      ],
+      "æ": [
+        "cat","bag","hat","back","apple","sad","map","black","match","glass",
+        "fast","dance","happy","planet","class","last","capture","answer","travel","tax"
+      ],
+      "ʌ": [
+        "cup","sun","luck","truck","love","up","mud","punch","blood","bus",
+        "run","fun","but","much","summer","son","cut","shut","county","update"
+      ],
+      "ə": [
+        "about","sofa","pencil","banana","actor","parent","again","water","doctor","family",
+        "problem","support","tomato","dinner","summer","memory","animal","cousin","policy","cushion"
+      ],
+      "eɪ": [
+        "play","make","take","face","day","cake","rain","say","made","name",
+        "late","same","place","wait","game","paint","weight","date","break","change"
+      ],
+      "aɪ": [
+        "my","like","time","five","light","high","night","find","bike","mind",
+        "ride","fine","white","price","design","child","size","inside","guy","write"
+      ],
+      "ɔɪ": [
+        "boy","coin","voice","choice","toy","joy","noise","oil","point","enjoy",
+        "boil","join","void","royal","soil","spoiled","annoy","voyage","toy","voice"
+      ],
+      "aʊ": [
+        "now","out","house","loud","mouth","cow","about","brown","found","cloud",
+        "sound","shout","count","south","power","flower","mouse","ground","outfit","shout"
+      ],
+      "əʊ": [
+        "go","no","know","home","show","so","only","open","rose","boat",
+        "most","road","slow","those","alone","over","both","phone","joke","road"
+      ],
+      "ɪə": [
+        "near","here","beer","dear","year","idea","fear","clear","cheer","peer",
+        "sincere","career","ear","appear","gear","tear","yearly","clearance","cheerful","dear"
+      ],
+      "eə": [
+        "hair","care","fair","chair","bear","square","air","dare","share","pair",
+        "there","where","declare","aware","repair","compare","stare","pear","squarely","chair"
+      ],
+      "ʊə": [
+        "poor","tour","sure","cure","your","tourist","secure","pure","manure","insure",
+        "endure","during","touring","assure","securely","purest","cured","mature","surely","pure"
+      ]
+    };
+
+    const DICTIONARY_API_BASE = 'https://api.dictionaryapi.dev/api/v2/entries/en';
+    let currentVowel = 'ɑː';
+    let currentPage = 0;
+    let currentCard = null;
+    let balloonTimer = null;
+
+    const vowelSelect = document.getElementById('vowelSelect');
+    const nextButton = document.getElementById('nextButton');
+    const wordsGrid = document.getElementById('wordsGrid');
+
+    function getPageWords() {
+      const list = VOWEL_WORDS[currentVowel] || [];
+      const pageSize = 10;
+      const start = currentPage * pageSize;
+      const pageWords = list.slice(start, start + pageSize);
+      if (!pageWords.length) {
+        currentPage = 0;
+        return list.slice(0, pageSize);
+      }
+      return pageWords;
+    }
+
+    async function handleWordClick(word, idx, card) {
+      if (balloonTimer) clearTimeout(balloonTimer);
+      if (currentCard && currentCard !== card) {
+        const prevBalloon = currentCard.querySelector('.balloon');
+        if (prevBalloon) prevBalloon.classList.remove('visible');
+      }
+      currentCard = card;
+      card.classList.remove('playing');
+      void card.offsetWidth;
+      card.classList.add('playing');
+      setTimeout(() => card.classList.remove('playing'), 650);
+
+      const balloon = document.getElementById(`balloon-${idx}`);
+      balloon.innerHTML = `<div class="balloon-loading"><span class="spinner"></span>Loading…</div><div class="balloon-timer"></div>`;
+      balloon.classList.add('visible');
+
+      try {
+        const response = await fetch(`${DICTIONARY_API_BASE}/${encodeURIComponent(word)}`);
+        if (!response.ok) throw new Error('Dictionary request failed');
+        const data = await response.json();
+        const entry = data[0] || {};
+        const phonetic = entry.phonetic || entry.phonetics?.find(p => p.text)?.text || '';
+        const meaning = entry.meanings?.[0];
+        const partOfSpeech = meaning?.partOfSpeech || '';
+        const definition = meaning?.definitions?.[0]?.definition || 'Definition unavailable.';
+        const audioUrl = entry.phonetics?.find(p => p.audio && p.audio.trim())?.audio || '';
+
+        balloon.innerHTML = `
+          ${partOfSpeech ? `<div class="balloon-pos">${partOfSpeech}</div>` : ''}
+          ${phonetic ? `<div class="balloon-ipa">${phonetic}</div>` : `<div class="balloon-ipa">/${word}/</div>`}
+          <div class="balloon-meaning">${definition}</div>
+          <div class="balloon-timer"></div>
+        `;
+
+        if (audioUrl) {
+          const audioSrc = audioUrl.startsWith('//') ? `https:${audioUrl}` : audioUrl;
+          new Audio(audioSrc).play().catch(() => speakFallback(word));
+        } else {
+          speakFallback(word);
+        }
+      } catch (error) {
+        balloon.innerHTML = `
+          <div class="balloon-ipa">${word}</div>
+          <div class="balloon-meaning">Could not load pronunciation.</div>
+          <div class="balloon-timer"></div>
+        `;
+        speakFallback(word);
+      }
+
+      balloonTimer = setTimeout(() => {
+        balloon.classList.remove('visible');
+      }, 4000);
+    }
+
+    function speakFallback(word) {
+      if (!('speechSynthesis' in window)) return;
+      const utterance = new SpeechSynthesisUtterance(word);
+      utterance.lang = 'en-US';
+      utterance.rate = 0.9;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function loadWords() {
+      wordsGrid.innerHTML = '';
+      const pageWords = getPageWords();
+
+      pageWords.forEach((word, index) => {
+        const card = document.createElement('div');
+        card.className = 'word-card';
+        card.tabIndex = 0;
+        card.innerHTML = `
+          <span class="word-num">${String(index + 1).padStart(2, '0')}</span>
+          <span class="word-text">${word}</span>
+          <div class="balloon" id="balloon-${index}">
+            <div class="balloon-loading"><span class="spinner"></span>Loading…</div>
+            <div class="balloon-timer"></div>
+          </div>
+        `;
+
+        card.addEventListener('click', () => handleWordClick(word, index, card));
+        card.addEventListener('keydown', event => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            card.click();
+          }
+        });
+
+        wordsGrid.appendChild(card);
+      });
+    }
+
+    vowelSelect.addEventListener('change', () => {
+      currentVowel = vowelSelect.value;
+      currentPage = 0;
+      loadWords();
+    });
+
+    nextButton.addEventListener('click', () => {
+      currentPage += 1;
+      loadWords();
+    });
+
+    loadWords();
+  </script>
+</body>
+</html>
