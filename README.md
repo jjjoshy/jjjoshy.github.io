@@ -1,6 +1,6 @@
 
-<p align="center">
-	<a href="https://github.com/jjjoshy">
+<p align="left">
+	<a href="https://www.linkedin.com/in/joshy-joseph-au/">
 		<img src="images/linkedin.jpg" alt="Joshy" width="120" />
 	</a>
 </p>
