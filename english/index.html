@@ -82,6 +82,48 @@
     margin: 18px auto 0;
   }
 
+  /* Topics panel */
+  .topics-panel {
+    position: absolute;
+    left: 20px;
+    top: 140px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 200;
+  }
+
+  .topic-btn {
+    background: rgba(255,255,255,0.85);
+    border: 1px solid rgba(26,16,8,0.06);
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+
+  .topic-btn.active {
+    background: var(--paper);
+    color: var(--ink);
+    border-color: rgba(26,16,8,0.12);
+    box-shadow: 0 6px 20px rgba(26,16,8,0.06);
+  }
+
+  @media (max-width: 760px) {
+    .topics-panel {
+      position: relative;
+      left: 0;
+      top: 0;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+  }
+
   /* ── Level selector ── */
   .level-selector {
     display: flex;
@@ -252,9 +294,9 @@
   /* ── Balloon ── */
   .balloon {
     position: absolute;
-    bottom: calc(100% + 16px);
+    bottom: calc(100% + 26px);
     left: 50%;
-    transform: translateX(-50%) translateY(8px);
+    transform: translateX(-50%) translateY(18px);
     background: var(--balloon-bg);
     color: var(--balloon-text);
     padding: 14px 18px;
@@ -269,9 +311,9 @@
   }
 
   .balloon.visible {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
+      opacity: 1;
+      transform: translateX(-50%) translateY(-8px);
+    }
 
   .balloon::after {
     content: '';
@@ -410,6 +452,20 @@
 </head>
 <body class="intermediate">
 
+<!-- Topics panel (left side) -->
+<div class="topics-panel" id="topicsPanel">
+  <button class="topic-btn active" data-topic="general" onclick="setTopic('general')">General</button>
+  <button class="topic-btn" data-topic="education" onclick="setTopic('education')">Education</button>
+  <button class="topic-btn" data-topic="teaching" onclick="setTopic('teaching')">Teaching</button>
+  <button class="topic-btn" data-topic="mental_health" onclick="setTopic('mental_health')">Mental Health</button>
+  <button class="topic-btn" data-topic="shopping" onclick="setTopic('shopping')">Shopping</button>
+  <button class="topic-btn" data-topic="politics" onclick="setTopic('politics')">Politics</button>
+  <button class="topic-btn" data-topic="geography" onclick="setTopic('geography')">Geography</button>
+  <button class="topic-btn" data-topic="science" onclick="setTopic('science')">Science</button>
+  <button class="topic-btn" data-topic="technology" onclick="setTopic('technology')">Technology</button>
+  <button class="topic-btn" data-topic="mathematics" onclick="setTopic('mathematics')">Mathematics</button>
+</div>
+
 <header>
   <h1>Word <span>Whisperer</span></h1>
   <div class="divider"></div>
@@ -488,6 +544,69 @@ const LEVEL_LABELS = {
   advanced: 'Advanced · B2–C1'
 };
 
+// Topics data
+const TOPICS = ['general','education','teaching','mental_health','shopping','politics','geography','science','technology','mathematics'];
+
+// Words per topic and level. 'general' reuses WORDS object below.
+const TOPIC_WORDS = {
+  general: WORDS,
+  education: {
+    beginner: ["school","book","teacher","learn","study","grade","class","homework","lesson","test","read","write","pupil","desk","note","quiz","exam","chalk","subject","college"],
+    intermediate: ["curriculum","academic","lecture","syllabus","tuition","scholarship","instructor","seminar","discipline","assessment","tutorial","enroll","graduate","undergraduate","postgraduate","pedagogy","research","citation","laboratory","department"],
+    advanced: ["andragogy","epistemology","heuristic","didactic","plenarium","scholarship","habilitation","dissertation","postdoctoral","intercalation","orthography","prosopography","autodidactic","synoptic","heuristics","didactics","metacognition","cognitivism","constructivism","andragogic"]
+  },
+  teaching: {
+    beginner: ["explain","teach","show","guide","help","demo","ask","answer","example","practice","repeat","listen","watch","model","review","pair","share","check","coach","assist"],
+    intermediate: ["lesson plan","learning objective","assessment","instruction","differentiation","scaffolding","feedback","classroom management","formative","summative","rubric","pedagogy","engagement","sequencing","modelling","questioning","learning outcome","reflection","group work","instructional"],
+    advanced: ["curriculum design","instructional strategy","constructivist","andragogy","metacognitive","diagnostic assessment","authentic assessment","zone of proximal development","backward design","instructional alignment","educational psychology","learning taxonomy","sociocultural","instructional coaching","pedagogical content knowledge","andragogical techniques","heuristic instruction","didactic methodologies","microteaching","competency-based"]
+  },
+  mental_health: {
+    beginner: ["mind","feel","sad","happy","sleep","rest","stress","calm","talk","help","friend","breath","relax","mood","care","health","therapy","safe","rest","support"],
+    intermediate: ["anxiety","depression","therapy","counseling","mindfulness","self-care","stigma","resilience","coping","empathy","wellbeing","stress management","psyche","support group","psychiatry","psychology","burnout","trauma","meditation","mental wellbeing"],
+    advanced: ["cognitive behavioral therapy","psychopathology","psychopharmacology","neurodiversity","dialectical behavior therapy","existential therapy","neuroplasticity","trauma-informed care","psychodynamic","transdiagnostic","attachment theory","metacognition","somatic experiencing","neurobiology","epidemiology of mental disorders","iatrogenic","psychosocial interventions","psychoeducation","evidence-based practice","habilitation"]
+  },
+  shopping: {
+    beginner: ["shop","buy","sell","price","cash","card","sale","bag","market","mall","receipt","change","money","cost","cheap","expensive","pay","store","cart","discount"],
+    intermediate: ["transaction","purchase","refund","warranty","inventory","merchant","checkout","catalogue","promotional","boutique","retailer","wholesale","receipt","supplier","shipment","delivery","commission","loyalty","clearance","stock"],
+    advanced: ["consignment","merchandising","omnichannel","procurement","retailtainment","price elasticity","SKU","drop-shipping","market segmentation","POS","fulfillment","replenishment","wholesaling","rebate","cart abandonment","dynamic pricing","trade promotion","consumerism","benchmarking","stockkeeping"]
+  },
+  politics: {
+    beginner: ["vote","law","party","leader","city","state","police","judge","government","campaign","president","mayor","speech","senate","bill","vote","court","election","policy","tax"],
+    intermediate: ["parliament","legislation","cabinet","coalition","opposition","constituency","diplomacy","incumbent","referendum","constituent","lobbying","bureaucracy","ideology","sovereignty","federal","municipal","partisan","plank","platform","amendment"],
+    advanced: ["gerrymandering","realpolitik","hegemony","kleptocracy","plutocracy","subsidiarity","ostensible","bipartisanship","constitutionalism","filibuster","devolution","sovereign immunity","interregnum","jurisprudence","autarky","nepotism","oligarchy","plebiscite","demagogue","cacique"]
+  },
+  geography: {
+    beginner: ["map","country","city","river","mountain","sea","island","valley","forest","road","climate","weather","ocean","lake","hill","coast","desert","region","capital","border"],
+    intermediate: ["archipelago","peninsula","plateau","watershed","topography","latitude","longitude","equator","hemisphere","continent","delta","estuary","coastline","tectonics","glacier","savanna","biome","altitude","basin","isthmus"],
+    advanced: ["orography","paleogeography","geomorphology","anthropocene","alluvium","eustasy","paleoclimatology","endorheic","exorheic","oxbow","orogeny","cryosphere","permafrost","pelagic","littoral","xerophytic","orogenic","bathymetry","pedogenesis","biogeography"]
+  },
+  science: {
+    beginner: ["experiment","lab","atom","cell","plant","animal","water","energy","light","sound","force","matter","solar","gravity","space","planet","research","observe","measure","mix"],
+    intermediate: ["molecule","reaction","theory","hypothesis","variable","control","species","ecosystem","photosynthesis","genetics","physics","chemistry","biology","astronomy","geology","compound","enzyme","metabolism","quantum","evolution"],
+    advanced: ["thermodynamics","chromatography","spectroscopy","epidemiology","nanotechnology","bioinformatics","astrophysics","neuroscience","metabolomics","proteomics","phylogenetics","cosmology","quantization","hadron","isotope fractionation","crystallography","synthetic biology","chaotic dynamics","bioengineering","quantum entanglement"]
+  },
+  technology: {
+    beginner: ["computer","phone","internet","code","app","screen","mouse","keyboard","camera","email","file","login","website","search","download","upload","click","tool","battery","network"],
+    intermediate: ["algorithm","server","database","frontend","backend","api","protocol","encryption","debug","framework","responsive","ux","ui","middleware","virtualization","container","cloud","bandwidth","latency","iteration"],
+    advanced: ["machine learning","neural network","blockchain","microservices","container orchestration","distributed ledger","homomorphic encryption","federated learning","quantum computing","edge computing","GPU acceleration","tensor decomposition","natural language processing","adversarial examples","transformer architecture","hyperparameter","throughput optimization","observability","synthetic datasets","continuous deployment"]
+  },
+  mathematics: {
+    beginner: ["add","subtract","multiply","divide","number","count","shape","line","circle","square","angle","zero","one","two","ten","half","equal","sum","total","pair"],
+    intermediate: ["fraction","decimal","percent","variable","equation","function","graph","ratio","proportion","geometry","algebra","probability","statistics","derivative","integral","matrix","vector","sequence","series","logarithm"],
+    advanced: ["topology","manifold","eigenvalue","eigenvector","tensor","differential","stochastic","measure theory","homology","cohomology","ring theory","field extension","Galois","functional analysis","complex analysis","Riemann","Fourier transform","Laplace transform","spectral theory","ergodic"]
+  }
+};
+
+let currentTopic = 'general';
+
+function setTopic(topic) {
+  currentTopic = topic;
+  document.querySelectorAll('.topic-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.topic === topic);
+  });
+  loadWords();
+}
+
 let currentLevel = 'intermediate';
 let balloonTimer = null;
 let currentCard = null;
@@ -519,7 +638,9 @@ function loadWords() {
   balloonTimer && clearTimeout(balloonTimer);
   currentCard = null;
 
-  const words = shuffle(WORDS[currentLevel]).slice(0, 10);
+  // Use topic-specific words when available
+  const topicSource = (TOPIC_WORDS && TOPIC_WORDS[currentTopic] && TOPIC_WORDS[currentTopic][currentLevel]) || WORDS[currentLevel];
+  const words = shuffle(topicSource).slice(0, 10);
 
   words.forEach((word, i) => {
     const card = document.createElement('div');
