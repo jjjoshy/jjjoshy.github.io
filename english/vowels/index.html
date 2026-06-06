@@ -63,7 +63,16 @@
       margin-bottom: 28px;
     }
 
-    select, button {
+    .vowel-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      max-width: 100%;
+    }
+
+    .vowel-button,
+    button {
       font-family: 'DM Mono', monospace;
       font-size: 0.9rem;
       border: 1px solid var(--card-border);
@@ -72,15 +81,22 @@
       background: white;
       color: var(--ink);
       cursor: pointer;
-      transition: transform 0.16s ease, box-shadow 0.16s ease;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease, color 0.16s ease;
     }
 
-    select:focus, button:focus {
+    .vowel-button.active {
+      background: var(--accent);
+      color: white;
+      border-color: rgba(192,57,43,0.95);
+      box-shadow: 0 10px 24px rgba(26,16,8,0.12);
+    }
+
+    button:focus {
       outline: 2px solid var(--accent);
       outline-offset: 2px;
     }
 
-    button:hover, select:hover {
+    button:hover {
       transform: translateY(-1px);
       box-shadow: 0 10px 24px rgba(26,16,8,0.08);
     }
@@ -232,29 +248,27 @@
     </header>
 
     <div class="controls">
-      <label>
-        <select id="vowelSelect" aria-label="Choose a vowel sound">
-          <option value="ɑː">/ɑː/</option>
-          <option value="ɒ">/ɒ/</option>
-          <option value="ɔː">/ɔː/</option>
-          <option value="ʊ">/ʊ/</option>
-          <option value="uː">/uː/</option>
-          <option value="iː">/iː/</option>
-          <option value="ɪ">/ɪ/</option>
-          <option value="e">/e/</option>
-          <option value="æ">/æ/</option>
-          <option value="ʌ">/ʌ/</option>
-          <option value="ə">/ə/</option>
-          <option value="eɪ">/eɪ/</option>
-          <option value="aɪ">/aɪ/</option>
-          <option value="ɔɪ">/ɔɪ/</option>
-          <option value="aʊ">/aʊ/</option>
-          <option value="əʊ">/əʊ/</option>
-          <option value="ɪə">/ɪə/</option>
-          <option value="eə">/eə/</option>
-          <option value="ʊə">/ʊə/</option>
-        </select>
-      </label>
+      <div class="vowel-buttons" role="group" aria-label="Choose a vowel sound">
+        <button type="button" class="vowel-button active" data-vowel="ɑː">/ɑː/</button>
+        <button type="button" class="vowel-button" data-vowel="ɒ">/ɒ/</button>
+        <button type="button" class="vowel-button" data-vowel="ɔː">/ɔː/</button>
+        <button type="button" class="vowel-button" data-vowel="ʊ">/ʊ/</button>
+        <button type="button" class="vowel-button" data-vowel="uː">/uː/</button>
+        <button type="button" class="vowel-button" data-vowel="iː">/iː/</button>
+        <button type="button" class="vowel-button" data-vowel="ɪ">/ɪ/</button>
+        <button type="button" class="vowel-button" data-vowel="e">/e/</button>
+        <button type="button" class="vowel-button" data-vowel="æ">/æ/</button>
+        <button type="button" class="vowel-button" data-vowel="ʌ">/ʌ/</button>
+        <button type="button" class="vowel-button" data-vowel="ə">/ə/</button>
+        <button type="button" class="vowel-button" data-vowel="eɪ">/eɪ/</button>
+        <button type="button" class="vowel-button" data-vowel="aɪ">/aɪ/</button>
+        <button type="button" class="vowel-button" data-vowel="ɔɪ">/ɔɪ/</button>
+        <button type="button" class="vowel-button" data-vowel="aʊ">/aʊ/</button>
+        <button type="button" class="vowel-button" data-vowel="əʊ">/əʊ/</button>
+        <button type="button" class="vowel-button" data-vowel="ɪə">/ɪə/</button>
+        <button type="button" class="vowel-button" data-vowel="eə">/eə/</button>
+        <button type="button" class="vowel-button" data-vowel="ʊə">/ʊə/</button>
+      </div>
       <button id="nextButton">Next 10 words</button>
     </div>
 
@@ -348,9 +362,13 @@
     let currentCard = null;
     let balloonTimer = null;
 
-    const vowelSelect = document.getElementById('vowelSelect');
+    const vowelButtons = document.querySelectorAll('.vowel-button');
     const nextButton = document.getElementById('nextButton');
     const wordsGrid = document.getElementById('wordsGrid');
+
+    function setActiveVowelButton(selectedButton) {
+      vowelButtons.forEach(button => button.classList.toggle('active', button === selectedButton));
+    }
 
     function getPageWords() {
       const list = VOWEL_WORDS[currentVowel] || [];
@@ -456,10 +474,13 @@
       });
     }
 
-    vowelSelect.addEventListener('change', () => {
-      currentVowel = vowelSelect.value;
-      currentPage = 0;
-      loadWords();
+    vowelButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        currentVowel = button.dataset.vowel;
+        currentPage = 0;
+        setActiveVowelButton(button);
+        loadWords();
+      });
     });
 
     nextButton.addEventListener('click', () => {
