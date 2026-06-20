@@ -25,21 +25,13 @@ jobs:
       - name: Download weather data
         env:
           OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
-          WEATHER_CITY: ${{ secrets.WEATHER_CITY }}
-          WEATHER_LAT: ${{ secrets.WEATHER_LAT }}
-          WEATHER_LON: ${{ secrets.WEATHER_LON }}
         run: |
           if [ -z "$OPENWEATHER_API_KEY" ]; then
             echo "Missing OPENWEATHER_API_KEY secret"
             exit 1
           fi
 
-          if [ -n "$WEATHER_LAT" ] && [ -n "$WEATHER_LON" ]; then
-            query="lat=${WEATHER_LAT}&lon=${WEATHER_LON}"
-          else
-            query="q=${WEATHER_CITY:-London}"
-          fi
-
+          query="q=London"
           api_url="https://api.openweathermap.org/data/2.5/weather?${query}&units=metric&appid=${OPENWEATHER_API_KEY}"
           response=$(curl -sSL "$api_url")
 
