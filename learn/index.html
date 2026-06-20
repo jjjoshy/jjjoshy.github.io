@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather Dashboard</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #081028;
+      --surface: rgba(15, 30, 70, 0.93);
+      --surface-strong: rgba(20, 40, 90, 0.96);
+      --text: #e8eef8;
+      --muted: #98a8c7;
+      --accent: #8dd7ff;
+      --accent-strong: #5ec0ff;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      --border: rgba(255, 255, 255, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, system-ui, sans-serif;
+      background: radial-gradient(circle at top, rgba(51, 116, 255, 0.2), transparent 26%),
+                  radial-gradient(circle at left, rgba(15, 225, 255, 0.12), transparent 22%),
+                  linear-gradient(180deg, #020617 0%, #081028 100%);
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 1100px;
+      padding: 32px 24px 48px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: clamp(2rem, 3vw, 3rem);
+      line-height: 1.05;
+    }
+
+    .hero {
+      max-width: 600px;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.75;
+    }
+
+    .alert {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--accent);
+      font-size: 0.95rem;
+    }
+
+    .content {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+
+    .overview,
+    .details {
+      grid-column: span 12;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 28px;
+      backdrop-filter: blur(20px);
+    }
+
+    .overview {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .overview-main {
+      display: grid;
+      gap: 16px;
+    }
+
+    .overview-main h2,
+    .overview-main p {
+      margin: 0;
+    }
+
+    .overview-main h2 {
+      font-size: clamp(2.2rem, 3vw, 3rem);
+    }
+
+    .metric-group {
+      display: grid;
+      gap: 12px;
+    }
+
+    .metric {
+      display: grid;
+      gap: 6px;
+      padding: 18px 20px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .metric span {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .metric strong {
+      font-size: 1.4rem;
+      color: var(--text);
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .detail-card {
+      padding: 20px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      transition: transform 0.2s ease;
+    }
+
+    .detail-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .detail-card h3 {
+      margin: 0 0 10px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .detail-card p {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .status-line {
+      display: grid;
+      gap: 8px;
+      margin-top: 24px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .status-line strong {
+      color: var(--text);
+    }
+
+    .refresh {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 12px;
+      padding: 0.9rem 1.2rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(20, 35, 70, 0.95);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.96rem;
+      transition: background 0.2s ease;
+    }
+
+    .refresh:hover {
+      background: rgba(20, 45, 95, 1);
+    }
+
+    .error-box {
+      padding: 18px 20px;
+      border-radius: 20px;
+      border: 1px solid #ff6f6f;
+      background: rgba(255, 111, 111, 0.12);
+      color: #ffdcd7;
+      font-size: 0.98rem;
+    }
+
+    @media (max-width: 900px) {
+      .overview {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div>
+        <h1>Weather Dashboard</h1>
+        <p class="hero">Live view of the latest weather data from <code>data/weather.json</code>. This page updates automatically when the GitHub Action refreshes the file.</p>
+      </div>
+      <div class="alert">Updated from data/weather.json</div>
+    </header>
+
+    <div class="content">
+      <section class="overview">
+        <div class="overview-main">
+          <h2 id="location">Loading…</h2>
+          <p id="summary">Fetching weather details.</p>
+          <div class="status-line">
+            <div><strong id="last-updated">—</strong> last updated</div>
+            <div id="data-time"></div>
+          </div>
+          <button class="refresh" id="refresh">Reload data</button>
+        </div>
+
+        <div class="metric-group">
+          <div class="metric">
+            <span>Temperature</span>
+            <strong id="temp">—</strong>
+          </div>
+          <div class="metric">
+            <span>Feels like</span>
+            <strong id="feels_like">—</strong>
+          </div>
+          <div class="metric">
+            <span>Humidity</span>
+            <strong id="humidity">—</strong>
+          </div>
+          <div class="metric">
+            <span>Pressure</span>
+            <strong id="pressure">—</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="details">
+        <div class="details-grid">
+          <article class="detail-card">
+            <h3>Weather</h3>
+            <p id="weather-main">—</p>
+          </article>
+          <article class="detail-card">
+            <h3>Visibility</h3>
+            <p id="visibility">—</p>
+          </article>
+          <article class="detail-card">
+            <h3>Cloud Coverage</h3>
+            <p id="clouds">—</p>
+          </article>
+          <article class="detail-card">
+            <h3>Wind</h3>
+            <p id="wind">—</p>
+          </article>
+          <article class="detail-card">
+            <h3>Sunrise / Sunset</h3>
+            <p id="sun-times">—</p>
+          </article>
+          <article class="detail-card">
+            <h3>Location</h3>
+            <p id="country">—</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="error" class="error-box" hidden></section>
+    </div>
+  </div>
+
+  <script>
+    const url = new URL('../data/weather.json', location.href).href;
+    const refreshButton = document.getElementById('refresh');
+    const errorBox = document.getElementById('error');
+
+    const fields = {
+      location: document.getElementById('location'),
+      summary: document.getElementById('summary'),
+      lastUpdated: document.getElementById('last-updated'),
+      dataTime: document.getElementById('data-time'),
+      temp: document.getElementById('temp'),
+      feelsLike: document.getElementById('feels_like'),
+      humidity: document.getElementById('humidity'),
+      pressure: document.getElementById('pressure'),
+      weatherMain: document.getElementById('weather-main'),
+      visibility: document.getElementById('visibility'),
+      clouds: document.getElementById('clouds'),
+      wind: document.getElementById('wind'),
+      sunTimes: document.getElementById('sun-times'),
+      country: document.getElementById('country')
+    };
+
+    function formatDate(value) {
+      if (!value) return '—';
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return value;
+      return date.toLocaleString(undefined, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    function formatTemperature(value) {
+      return value === null || value === undefined ? '—' : `${Number(value).toFixed(1)}°C`;
+    }
+
+    function loadWeather() {
+      errorBox.hidden = true;
+      errorBox.textContent = '';
+      fields.location.textContent = 'Loading…';
+      fields.summary.textContent = 'Fetching weather details.';
+
+      fetch(url, { cache: 'no-store' })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          const weather = (data.weather && data.weather[0]) || {};
+          const main = data.main || {};
+          const wind = data.wind || {};
+          const sys = data.sys || {};
+
+          fields.location.textContent = data.name || 'Unknown location';
+          fields.summary.textContent = `${weather.main || 'Unknown'} — ${weather.description || 'No description'}`;
+          fields.lastUpdated.textContent = formatDate(data.last_updated);
+          fields.dataTime.textContent = data.dt ? `Measurement time: ${formatDate(new Date((data.dt || 0) * 1000).toISOString())}` : '';
+          fields.temp.textContent = formatTemperature(main.temp);
+          fields.feelsLike.textContent = formatTemperature(main.feels_like);
+          fields.humidity.textContent = main.humidity !== undefined ? `${main.humidity}%` : '—';
+          fields.pressure.textContent = main.pressure !== undefined ? `${main.pressure} hPa` : '—';
+          fields.weatherMain.textContent = weather.description ? `${weather.description}` : '—';
+          fields.visibility.textContent = data.visibility !== undefined ? `${data.visibility} m` : '—';
+          fields.clouds.textContent = data.clouds && data.clouds.all !== undefined ? `${data.clouds.all}%` : '—';
+          fields.wind.textContent = wind.speed !== undefined ? `${wind.speed} m/s` : '—';
+          fields.sunTimes.textContent = sys.sunrise && sys.sunset ? `${formatDate(new Date(sys.sunrise * 1000).toISOString())} / ${formatDate(new Date(sys.sunset * 1000).toISOString())}` : '—';
+          fields.country.textContent = sys.country ? `${sys.country}` : '—';
+        })
+        .catch((error) => {
+          fields.location.textContent = 'Unable to load weather';
+          fields.summary.textContent = 'Please check data/weather.json availability.';
+          errorBox.hidden = false;
+          errorBox.textContent = `Error loading weather data: ${error.message}`;
+        });
+    }
+
+    refreshButton.addEventListener('click', loadWeather);
+    loadWeather();
+  </script>
+</body>
+</html>

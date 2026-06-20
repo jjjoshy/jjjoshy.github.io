@@ -1,0 +1,31 @@
+{
+  "name": "Unknown",
+  "weather": [
+    {
+      "main": "Unknown",
+      "description": "Weather data not fetched yet"
+    }
+  ],
+  "main": {
+    "temp": null,
+    "feels_like": null,
+    "temp_min": null,
+    "temp_max": null,
+    "humidity": null,
+    "pressure": null
+  },
+  "wind": {
+    "speed": null,
+    "deg": null
+  },
+  "clouds": { "all": null },
+  "visibility": null,
+  "sys": {
+    "sunrise": null,
+    "sunset": null,
+    "country": null
+  },
+  "timezone": 0,
+  "dt": null,
+  "last_updated": "1970-01-01T00:00:00Z"
+}

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wiktionary API Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 24px;
+      background: #f7f7f7;
+      color: #222;
+    }
+    .container {
+      max-width: 740px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+    }
+    h1 {
+      margin-top: 0;
+    }
+    .controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    input[type="text"] {
+      flex: 1;
+      min-width: 220px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    button {
+      padding: 12px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background: #2d7cdb;
+      color: white;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+    pre {
+      white-space: pre-wrap;
+      background: #f4f6fb;
+      border: 1px solid #dde4ef;
+      border-radius: 12px;
+      padding: 16px;
+      overflow-x: auto;
+    }
+    .note {
+      margin-bottom: 18px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Wiktionary API Example</h1>
+    <p class="note">Enter a word and click <strong>Search</strong> to fetch Wiktionary data via the MediaWiki API.</p>
+    <div class="controls">
+      <input id="wordInput" type="text" placeholder="Type a word, e.g. example" value="example" />
+      <button id="searchButton">Search</button>
+    </div>
+    <div id="output"></div>
+    <h2>Example JS Request</h2>
+    <pre><code>const response = await fetch('https://en.wiktionary.org/w/api.php?action=query&titles=example&prop=extracts&format=json&origin=*');
+const data = await response.json();
+console.log(data);
+</code></pre>
+  </div>
+
+  <script>
+    const input = document.getElementById('wordInput');
+    const button = document.getElementById('searchButton');
+    const output = document.getElementById('output');
+
+    button.addEventListener('click', () => {
+      const word = input.value.trim();
+      if (!word) return;
+      fetchWiktionary(word);
+    });
+
+    async function fetchWiktionary(word) {
+      button.disabled = true;
+      output.innerHTML = '<p>Loading...</p>';
+
+      const apiUrl = new URL('https://en.wiktionary.org/w/api.php');
+      apiUrl.searchParams.set('action', 'query');
+      apiUrl.searchParams.set('format', 'json');
+      apiUrl.searchParams.set('titles', word);
+      apiUrl.searchParams.set('prop', 'extracts|pageimages');
+      apiUrl.searchParams.set('exintro', '');
+      apiUrl.searchParams.set('explaintext', '');
+      apiUrl.searchParams.set('origin', '*');
+
+      try {
+        const response = await fetch(apiUrl.toString(), {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        renderResult(word, data);
+      } catch (error) {
+        output.innerHTML = `<p style="color: #c0392b;">Error: ${error.message}</p>`;
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    function renderResult(word, data) {
+      const pages = data.query?.pages;
+      if (!pages) {
+        output.innerHTML = '<p>No result found.</p>';
+        return;
+      }
+
+      const page = Object.values(pages)[0];
+      if (!page || page.missing) {
+        output.innerHTML = `<p>No entry found for <strong>${word}</strong>.</p>`;
+        return;
+      }
+
+      const extract = page.extract || 'No extract available.';
+      output.innerHTML = `
+        <h2>Result for: ${word}</h2>
+        <p><strong>Page ID:</strong> ${page.pageid}</p>
+        <p><strong>Title:</strong> ${page.title}</p>
+        <div><pre>${escapeHtml(extract)}</pre></div>
+      `;
+    }
+
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
+</body>
+</html>
