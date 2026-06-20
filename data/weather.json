@@ -1,31 +1,47 @@
 {
-  "name": "London",
+  "coord": {
+    "lon": -0.1257,
+    "lat": 51.5085
+  },
   "weather": [
     {
-      "main": "Unknown",
-      "description": "Weather data not fetched yet"
+      "id": 803,
+      "main": "Clouds",
+      "description": "broken clouds",
+      "icon": "04d"
     }
   ],
+  "base": "stations",
   "main": {
-    "temp": null,
-    "feels_like": null,
-    "temp_min": null,
-    "temp_max": null,
-    "humidity": null,
-    "pressure": null
+    "temp": 23.02,
+    "feels_like": 23.23,
+    "temp_min": 22.23,
+    "temp_max": 24.21,
+    "pressure": 1018,
+    "humidity": 71,
+    "sea_level": 1018,
+    "grnd_level": 1014
   },
+  "visibility": 10000,
   "wind": {
-    "speed": null,
-    "deg": null
+    "speed": 2.24,
+    "deg": 182,
+    "gust": 4.02
   },
-  "clouds": { "all": null },
-  "visibility": null,
+  "clouds": {
+    "all": 72
+  },
+  "dt": 1781950208,
   "sys": {
-    "sunrise": null,
-    "sunset": null,
-    "country": null
+    "type": 2,
+    "id": 2075535,
+    "country": "GB",
+    "sunrise": 1781926973,
+    "sunset": 1781986869
   },
-  "timezone": 0,
-  "dt": null,
-  "last_updated": "1970-01-01T00:00:00Z"
+  "timezone": 3600,
+  "id": 2643743,
+  "name": "London",
+  "cod": 200,
+  "last_updated": "2026-06-20T10:16:03Z"
 }
