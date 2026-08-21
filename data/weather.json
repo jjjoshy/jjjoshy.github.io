@@ -24,13 +24,14 @@
   },
   "visibility": 10000,
   "wind": {
-    "speed": 2.06,
-    "deg": 340
+    "speed": 4.5,
+    "deg": 2,
+    "gust": 5.8
   },
   "clouds": {
-    "all": 80
+    "all": 76
   },
-  "dt": 1787354660,
+  "dt": 1787356035,
   "sys": {
     "type": 2,
     "id": 2075535,
@@ -42,5 +43,5 @@
   "id": 2643743,
   "name": "London",
   "cod": 200,
-  "last_updated": "2026-08-21T23:33:51Z"
+  "last_updated": "2026-08-21T23:54:50Z"
 }
