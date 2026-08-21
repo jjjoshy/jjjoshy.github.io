@@ -15,7 +15,7 @@
   "main": {
     "temp": 15.63,
     "feels_like": 15.31,
-    "temp_min": 14.62,
+    "temp_min": 14.68,
     "temp_max": 16.16,
     "pressure": 1010,
     "humidity": 79,
@@ -25,13 +25,13 @@
   "visibility": 10000,
   "wind": {
     "speed": 3.8,
-    "deg": 3,
+    "deg": 61,
     "gust": 5.8
   },
   "clouds": {
     "all": 67
   },
-  "dt": 1787269267,
+  "dt": 1787269666,
   "sys": {
     "type": 2,
     "id": 2075535,
@@ -43,5 +43,5 @@
   "id": 2643743,
   "name": "London",
   "cod": 200,
-  "last_updated": "2026-08-20T23:42:17Z"
+  "last_updated": "2026-08-21T00:01:11Z"
 }
