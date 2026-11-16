@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<meta name="description" content="Joshy Joseph — Senior DevOps and Platform Engineer in Sydney, Australia.">
+<title>Joshy Joseph | Senior DevOps &amp; Platform Engineer</title>
+<style>
+:root{--ink:#17232d;--muted:#657482;--line:#e7ecef;--soft:#f6f9f7;--green:#176b57;--green2:#105443;--max:1120px}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:86px}body{margin:0;background:#fff;color:var(--ink);font:16px/1.65 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}a:focus-visible,button:focus-visible{outline:3px solid #8bc9b8;outline-offset:3px}.container{width:min(var(--max),calc(100% - 44px));margin:auto}
+header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}.nav{height:72px;display:flex;align-items:center;justify-content:space-between;gap:22px}.brand{font-weight:850;letter-spacing:-.05em;font-size:1.08rem}.brand b{color:var(--green)}nav{display:flex;align-items:center;gap:23px}nav a{font-size:.86rem;color:#536271;font-weight:650}nav a:hover{color:var(--green)}nav .contact-link{background:var(--green);color:white;padding:9px 15px;border-radius:30px}.menu-btn{display:none;background:white;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:1.15rem}
+.hero{padding:76px 0 78px;background:radial-gradient(circle at 85% 12%,#eef7f2 0,white 36%)}.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:45px;align-items:center}.eyebrow,.kicker{color:var(--green);font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;font-weight:800}.eyebrow:before{content:"";display:inline-block;width:24px;height:2px;background:var(--green);vertical-align:middle;margin:0 9px 3px 0}h1{font-size:clamp(2.65rem,6vw,5rem);line-height:1.04;letter-spacing:-.065em;margin:18px 0}h1 span{color:var(--green)}.lead{font-size:1.15rem;color:var(--muted);max-width:720px}.photo-wrap{width:172px;height:172px;border-radius:26px;padding:6px;border:1px solid var(--line);background:white;box-shadow:0 14px 36px #183b2b12}.photo-wrap img{width:100%;height:100%;object-fit:cover;border-radius:21px;display:block}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}.btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 19px;border-radius:28px;border:1px solid var(--line);font-weight:750;font-size:.9rem}.primary{background:var(--green);border-color:var(--green);color:white}.primary:hover{background:var(--green2)}.meta{display:flex;gap:20px;flex-wrap:wrap;color:var(--muted);font-size:.87rem;margin-top:30px}.meta span:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#36a17b;margin:0 8px 1px 0}
+section{padding:76px 0}.soft{background:var(--soft)}.section-head{max-width:720px;margin-bottom:30px}h2{font-size:clamp(2rem,4vw,2.9rem);line-height:1.12;letter-spacing:-.05em;margin:8px 0 12px}.intro{color:var(--muted);margin:0}.about-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:44px}.copy{color:#536271}.copy p:first-child{margin-top:0}.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}.stat{padding:18px;border:1px solid var(--line);border-radius:15px}.stat strong{display:block;font-size:1.75rem;color:var(--green);letter-spacing:-.05em}.stat span{font-size:.8rem;color:var(--muted)}
+.skills{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.skill{background:white;border:1px solid var(--line);border-radius:15px;padding:21px}.skill .ico{display:grid;place-items:center;width:35px;height:35px;border-radius:10px;background:#edf6f1;color:var(--green);font-size:.78rem;font-weight:850;margin-bottom:14px}.skill h3{font-size:1rem;margin:0 0 7px}.skill p{font-size:.88rem;color:var(--muted);margin:0}
+.timeline{position:relative;margin-left:8px}.timeline:before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:1px;background:#dce6e0}.job{position:relative;padding:0 0 34px 36px}.job:last-child{padding-bottom:0}.job:before{content:"";position:absolute;left:0;top:8px;width:15px;height:15px;border-radius:50%;background:white;border:4px solid var(--green);z-index:1}.jobtop{display:flex;justify-content:space-between;gap:15px}.job h3{font-size:1.13rem;margin:0}.company{color:var(--green);font-weight:750}.date,.location{color:var(--muted);font-size:.85rem}.date{white-space:nowrap}.location{margin:2px 0 10px}.job ul{padding-left:18px;color:#536271;margin:0}.job li{padding:3px 0}.tech{color:var(--muted);font-size:.83rem;margin-top:10px}.tech b{color:var(--ink)}
+.edu-grid,.lab-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.edu,.lab{border:1px solid var(--line);border-radius:16px;padding:22px}.edu h3{font-size:1rem;margin:0 0 4px}.edu p{margin:0;color:var(--muted);font-size:.9rem}.lab{min-height:195px;display:flex;flex-direction:column;transition:.2s}.lab:hover{transform:translateY(-3px);box-shadow:0 14px 35px #183b2b12}.lab small{color:var(--green);font-weight:800;letter-spacing:.12em;text-transform:uppercase}.lab h3{font-size:1.3rem;margin:10px 0 5px}.lab p{color:var(--muted);font-size:.9rem;margin:0 0 16px}.lab a{margin-top:auto;color:var(--green);font-weight:750;font-size:.9rem}
+.contact-panel{background:#f0f7f3;border:1px solid #e1eee7;border-radius:20px;padding:clamp(25px,5vw,48px);display:flex;align-items:center;justify-content:space-between;gap:24px}.contact-panel h2{margin-bottom:7px}.contact-panel p{margin:0;color:var(--muted)}footer{border-top:1px solid var(--line);padding:23px 0;color:var(--muted);font-size:.83rem}.foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.footlinks{display:flex;gap:17px}
+@media(max-width:850px){nav{gap:13px}nav a{font-size:.79rem}.skills{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.container{width:calc(100% - 36px)}.nav{height:66px}.menu-btn{display:block}nav{display:none;position:absolute;left:0;right:0;top:66px;background:white;border-bottom:1px solid var(--line);padding:10px 18px 18px;box-shadow:0 16px 25px #17232d0c;flex-direction:column;align-items:stretch;gap:0}nav.open{display:flex}nav a{padding:11px 7px;font-size:.93rem}nav .contact-link{text-align:center;margin-top:7px}.hero{padding:54px 0 58px}.hero-grid{grid-template-columns:1fr;gap:23px}.photo-wrap{grid-row:1;width:116px;height:116px;border-radius:20px}.photo-wrap img{border-radius:15px}h1{font-size:clamp(2.55rem,12vw,4rem)}section{padding:59px 0}.about-grid{grid-template-columns:1fr;gap:23px}.jobtop{display:block}.date{display:block}.edu-grid,.lab-grid{grid-template-columns:1fr}.contact-panel{align-items:flex-start;flex-direction:column}}
+@media(max-width:430px){.skills{grid-template-columns:1fr}.meta{flex-direction:column;gap:8px}.stat{padding:14px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
+</style>
+</head>
+<body>
+<header><div class="container nav">
+<a class="brand" href="#home">JOSHY<b>.</b></a>
+<button class="menu-btn" id="menuBtn" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mainNav">☰</button>
+<nav id="mainNav" aria-label="Main navigation">
+<a href="#about">About</a><a href="#expertise">Expertise</a><a href="#experience">Experience</a><a href="#education">Education</a><a href="#creative-lab">Creative Lab</a><a class="contact-link" href="#contact">Contact</a>
+</nav></div></header>
+<main>
+<section class="hero" id="home"><div class="container hero-grid">
+<div><div class="eyebrow">Senior DevOps / Platform Engineer</div>
+<h1>Building reliable platforms.<br><span>Automating what matters.</span></h1>
+<p class="lead">I’m Joshy Joseph — a Senior DevOps and Platform Engineer with 19+ years of IT experience, helping teams modernise delivery, automate infrastructure and build resilient cloud platforms.</p>
+<div class="actions"><a class="btn primary" href="#experience">Explore my experience ↗</a><a class="btn" href="mailto:kjjoshy@gmail.com">Get in touch</a></div>
+<div class="meta"><span>Sydney, Australia</span><span>19+ years in IT</span><span>Cloud · CI/CD · Automation</span></div></div>
+<div class="photo-wrap"><img src="https://raw.githubusercontent.com/jjjoshy/jjjoshy.github.io/main/images/linkedin.jpg" alt="Portrait of Joshy Joseph" onerror="this.style.display='none';this.parentElement.style.display='grid';this.parentElement.style.placeItems='center';this.parentElement.textContent='Your photo';"></div>
+</div></section>
+<section id="about"><div class="container"><div class="section-head"><div class="kicker">About me</div><h2>Engineering the path from code to production.</h2></div>
+<div class="about-grid"><div class="copy">
+<p>Senior DevOps and Platform Engineer with enterprise release governance and cloud automation experience. My career has progressed from software engineering fundamentals to orchestrating complex, resilient platform modernisations.</p>
+<p>I automate on-premises and cloud operations using Jenkins, Ansible CLI, Ansible Automation Platform (AAP), Groovy, AWS, Kubernetes, Terraform, Docker, Helm and GitHub Actions. I also integrate Generative AI and MCP tooling, including Claude Code and AWS KIRO, for automated IaC generation and security reviews.</p>
+<p>I bring software fundamentals, release governance and hands-on automation together to align cross-functional teams and drive scalable deployment solutions.</p></div>
+<div class="stats"><div class="stat"><strong>19+</strong><span>Years of IT experience</span></div><div class="stat"><strong>30+</strong><span>Legacy CI/CD pipelines modernised</span></div><div class="stat"><strong>10–15 min</strong><span>Deployment time achieved</span></div><div class="stat"><strong>99%</strong><span>Infrastructure uptime</span></div></div></div></div></section>
+<section class="soft" id="expertise"><div class="container"><div class="section-head"><div class="kicker">Technical expertise</div><h2>Tools and technologies I work with.</h2><p class="intro">A hands-on mix of platform engineering, delivery automation, cloud infrastructure and operational excellence.</p></div>
+<div class="skills">
+<article class="skill"><div class="ico">CI/CD</div><h3>DevOps, CI/CD &amp; GitOps</h3><p>Jenkins, GitHub Actions, Bamboo, Maven, Gradle, Nexus, SDLC Governance, ArgoCD.</p></article>
+<article class="skill"><div class="ico">AWS</div><h3>Cloud &amp; Networking</h3><p>AWS, VPC, API Gateway, load balancing, DNS, cloud storage and FinOps.</p></article>
+<article class="skill"><div class="ico">K8s</div><h3>Containers &amp; Platforms</h3><p>Kubernetes, EKS, Docker, Helm, RHEL, UNIX and Linux administration.</p></article>
+<article class="skill"><div class="ico">&lt;/&gt;</div><h3>Programming &amp; Scripting</h3><p>Bash, Python, Shell, Java, Spring Boot, Groovy, PowerShell and JSON.</p></article>
+<article class="skill"><div class="ico">IaC</div><h3>Automation &amp; IaC</h3><p>Ansible CLI, Ansible Automation Platform, Terraform, configuration management and server provisioning.</p></article>
+<article class="skill"><div class="ico">AI</div><h3>AI-assisted Automation</h3><p>Generative AI, Claude Code, MCP Servers, AWS KIRO, AI-driven IaC and automated code/security reviews.</p></article>
+<article class="skill"><div class="ico">SRE</div><h3>SRE &amp; Observability</h3><p>Dynatrace, Splunk, application monitoring, production support and performance optimisation.</p></article>
+<article class="skill"><div class="ico">OPS</div><h3>Enterprise Operations</h3><p>ServiceNow, JIRA, Confluence, Git, GitHub, Bitbucket, troubleshooting and ITSM.</p></article>
+<article class="skill"><div class="ico">DB</div><h3>Databases &amp; Middleware</h3><p>MySQL, Oracle DB, DB2, WebSphere, Apache Tomcat and Linux systems.</p></article>
+</div></div></section>
+<section id="experience"><div class="container"><div class="section-head"><div class="kicker">Career journey</div><h2>Experience that delivers measurable change.</h2><p class="intro">Selected roles and outcomes from my professional journey.</p></div>
+<div class="timeline">
+<article class="job"><div class="jobtop"><div><h3>Senior DevOps / Platform Engineer</h3><div class="company">Allianz Technologies</div></div><div class="date">Jan 2019 – Present</div></div><div class="location">Sydney, Australia</div>
+<ul><li>Modernised 30+ legacy CI/CD pipelines from IBM UrbanCode Deploy to Jenkins, Ansible and AAP, reducing deployments from 4–5 hours to 10–15 minutes for 40+ applications.</li><li>Automated server provisioning, configuration, API gateway maintenance and application installation on RHEL/UNIX, eliminating 15 hours of manual work weekly for 50+ developers.</li><li>Led modernisation of 10+ enterprise CI/CD pipelines using Jenkins, Groovy and Jenkinsfile across five critical applications.</li><li>Reduced manual deployment effort by 40% across large-scale application and mainframe systems.</li><li>Partnered with cloud architects on AWS architectures and Docker/Kubernetes/Helm microservices, achieving 99% infrastructure uptime.</li><li>Reduced deployment incidents by 35%, embedded security and compliance in pipelines, and integrated AI/LLM tooling with MCP, KIRO and Claude Code.</li></ul>
+<div class="tech"><b>Key technologies:</b> Jenkins, Groovy, Ansible, GitHub Actions, Bamboo, Nexus, Dynatrace, Docker, Kubernetes, Helm, AWS, Terraform, Linux, Java, UrbanCode Deploy, Claude Code, Copilot, KIRO, MCP.</div></article>
+<article class="job"><div class="jobtop"><div><h3>Senior DevOps / Build &amp; Release Engineer</h3><div class="company">Federal Bank</div></div><div class="date">Apr 2017 – Jan 2019</div></div><div class="location">Kochi, India</div>
+<ul><li>Managed 100+ software releases, moving from monthly to weekly release frequency in coordination with development, QA and operations.</li><li>Reduced release errors by 60% through automated checks and validation in CI/CD pipelines.</li><li>Governed SVN source control across 10+ parallel code branches, including branching strategies and merge resolutions.</li><li>Automated release tasks, reducing change lead time by 40%, and improved release documentation and installation handbooks.</li></ul>
+<div class="tech"><b>Key technologies:</b> Subversion (SVN), build and release management, configuration management, release documentation and version control.</div></article>
+<article class="job"><div class="jobtop"><div><h3>Java Technical Lead</h3><div class="company">National Grid</div></div><div class="date">Nov 2014 – Apr 2017</div></div><div class="location">London, UK</div>
+<ul><li>Decreased post-release defects by 20% through peer code reviews and engineering best practices.</li><li>Improved delivery planning and critical-path estimation to drive 40% faster deployment cycles.</li><li>Removed runtime blockages in legacy build processes and infrastructure nodes, saving eight hours per deployment cycle.</li><li>Resolved critical issues affecting build processes, application deployments and infrastructure nodes.</li></ul>
+<div class="tech"><b>Key technologies:</b> Java, enterprise application development, build and deployment automation, application troubleshooting and Agile delivery.</div></article>
+</div></div></section>
+<section class="soft" id="education"><div class="container"><div class="section-head"><div class="kicker">Education</div><h2>Academic foundation.</h2></div><div class="edu-grid">
+<div class="edu"><h3>Master of Science in Computer Science</h3><p>Mahatma Gandhi University, India</p></div>
+<div class="edu"><h3>Bachelor of Computer Applications (BCA)</h3><p>University of Calicut, India</p></div>
+</div></div></section>
+<section id="creative-lab"><div class="container"><div class="section-head"><div class="kicker">Beyond engineering</div><h2>Creative Lab.</h2><p class="intro">A space for my experiments, learning projects and creative web tools.</p></div>
+<div class="lab-grid">
+<article class="lab"><small>Project 01</small><h3>Today</h3><p>A personal web project from my Creative Lab.</p><a href="https://jjjoshy.github.io/today/" target="_blank" rel="noopener noreferrer">Open Today ↗</a></article>
+<article class="lab"><small>Project 02</small><h3>English</h3><p>An English learning project from my Creative Lab.</p><a href="https://jjjoshy.github.io/english/" target="_blank" rel="noopener noreferrer">Open English ↗</a></article>
+</div></div></section>
+<section id="contact"><div class="container"><div class="contact-panel"><div><div class="kicker">Get in touch</div><h2>Let’s build something dependable.</h2><p>Interested in platform engineering, DevOps automation or cloud modernisation? I’d be glad to connect.</p></div><div class="actions"><a class="btn primary" href="mailto:kjjoshy@gmail.com">Email me ↗</a><a class="btn" href="https://www.linkedin.com/in/joshy-joseph-au/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a></div></div></div></section>
+</main>
+<footer><div class="container foot"><span>© <span id="year"></span> Joshy Joseph · Sydney, Australia</span><div class="footlinks"><a href="mailto:kjjoshy@gmail.com">Email</a><a href="https://www.linkedin.com/in/joshy-joseph-au/" target="_blank" rel="noopener noreferrer">LinkedIn</a></div></div></footer>
+<script>
+const menuButton=document.getElementById('menuBtn');
+const nav=document.getElementById('mainNav');
+menuButton.addEventListener('click',()=>{const open=nav.classList.toggle('open');menuButton.setAttribute('aria-expanded',String(open));menuButton.textContent=open?'✕':'☰';});
+nav.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{nav.classList.remove('open');menuButton.setAttribute('aria-expanded','false');menuButton.textContent='☰';}));
+document.getElementById('year').textContent=new Date().getFullYear();
+</script>
+</body></html>
