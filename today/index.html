@@ -45,7 +45,7 @@ function next(){const choices=pool();if(!choices.length)return;let q=choices[Mat
 $('topic').addEventListener('change',e=>{topic=e.target.value;shown=[];position=-1;next()});$('random').addEventListener('click',next);$('prev').addEventListener('click',()=>{if(position>0){position--;show(shown[position])}});
 $('copy').addEventListener('click',async()=>{const text='“'+shown[position][1]+'” — '+shown[position][2];try{await navigator.clipboard.writeText(text);$('message').textContent='Quote copied.'}catch{$('message').textContent='Copy isn’t available in this browser.'}});
 $('share').addEventListener('click',async()=>{const q=shown[position],text='“'+q[1]+'” — '+q[2];try{if(navigator.share)await navigator.share({title:'Lumina inspiration',text});else{await navigator.clipboard.writeText(text);$('message').textContent='Quote copied to share.'}}catch{}});
-$('close').addEventListener('click',()=>{window.close();setTimeout(()=>{if(!window.closed)$('message').textContent='Your browser won’t let a webpage close itself. Close this tab, or swipe the app away from your recent apps.',300)});
+$('close').addEventListener('click',()=>{window.close();setTimeout(()=>{if(!window.closed)$('message').textContent='Your browser won’t let a webpage close itself. Close this tab, or swipe the app away from your recent apps.';},300);});
 if('serviceWorker'in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('sw.js').catch(()=>{});
 next();
 </script>
