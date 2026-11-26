@@ -39,7 +39,7 @@
 </head>
 <body>
 
-  <a href="#" onclick="openPage('today.html'); return false;">Open App</a>
+  <a href="#" onclick="openPage('https://jjjoshy.github.io/today'); return false;">Open App</a>
 
   <div id="overlay" class="overlay">
     <button class="close-btn" onclick="closePage()">✕</button>
@@ -47,13 +47,13 @@
   </div>
 
   <script>
-    function openPage(url) {
+    function openPage(url, e) {
+      e.preventDefault();
       document.getElementById('frame').src = url;
       document.getElementById('overlay').classList.add('active');
-      document.body.style.overflow = 'hidden'; // prevent background scroll
-      // Optional: try Fullscreen API (works on Android)
-      document.getElementById('overlay').requestFullscreen?.({ navigationUI: 'hide' });
-    }
+      document.body.style.overflow = 'hidden';
+      document.getElementById('overlay').requestFullscreen?.({ navigationUI: 'hide' });  
+    }   
 
     function closePage() {
       document.getElementById('overlay').classList.remove('active');
